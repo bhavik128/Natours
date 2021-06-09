@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const xss = require('xss-clean');
 const RateLimit = require('express-rate-limit');
 const hpp = require('hpp');
+const compression = require('compression');
 
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
@@ -63,6 +64,8 @@ app.use(
     ]
   })
 );
+
+app.use(compression());
 
 // Middleware for serving static files
 app.use(express.static(path.join(__dirname, 'public')));
