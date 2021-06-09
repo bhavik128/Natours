@@ -1,2 +1,3 @@
-#Natours Application
-Technologies used:Node.js, express, MongoDB, Mongoose
+Natours Application
+
+Technologies used: Node.js, express, MongoDB, Mongoose
