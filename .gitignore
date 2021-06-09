@@ -1,5 +1,3 @@
 node_modules/
-.prettierrc
-eslintrc.json
 *.env
 .DS_Store
