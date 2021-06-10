@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 // eslint-disable-next-line node/no-unpublished-require,import/no-extraneous-dependencies
-const morgan = require('morgan');
+//const morgan = require('morgan');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const cookieParser = require('cookie-parser');
@@ -28,9 +28,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(helmet());
 
 // morgan middleware for request information in development
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+// if (process.env.NODE_ENV === 'development') {
+//   app.use(morgan('dev'));
+// }
 
 // rate limiter middleware
 const limiter = new RateLimit({
