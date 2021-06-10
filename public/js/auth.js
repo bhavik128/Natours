@@ -42,7 +42,7 @@ export const logout = async () => {
   }
 };
 
-export const signup = async (name, email, password, passwordConfirm) => {
+export const signup = async (name, email, password, passwordConfirm,event) => {
   try {
     const res = await axios({
       method: 'POST',
