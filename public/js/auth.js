@@ -162,7 +162,7 @@ export const resetPassword = async (
       showAlert('success', res.data.message);
       event.target.lastChild.lastChild.textContent = 'CHANGE PASSWORD';
       window.setTimeout(() => {
-        window.location = '/login';
+        window.location = '/';
       }, 1500);
     }
   } catch (err) {
