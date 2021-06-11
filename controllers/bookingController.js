@@ -2,8 +2,13 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Tour = require('../models/tourModel');
 const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
+  if (!req.user.canBookTour) {
+    return next(new AppError('Verify your email to book tour', 401));
+  }
+
   const { tourID } = req.params;
 
   const tour = await Tour.findById(tourID);

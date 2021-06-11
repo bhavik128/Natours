@@ -1,5 +1,5 @@
 import axios from 'axios';
-import showAlert from 'alert';
+import { showAlert } from './alert';
 
 export const bookTour = async tourID => {
   const stripe = Stripe(`${process.env.STRIPE_PUBLIC_KEY}`);
@@ -10,9 +10,6 @@ export const bookTour = async tourID => {
 
     await stripe.redirectToCheckout({ sessionId: session.data.session.id });
   } catch (err) {
-    console.log(err);
-    showAlert('error', err);
+    showAlert('error', err.response.data.message);
   }
 };
-
-// email verification
