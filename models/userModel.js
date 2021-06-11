@@ -54,7 +54,8 @@ const userSchema = new mongoose.Schema({
   canBookTour: {
     type: Boolean,
     default: false
-  }
+  },
+  verificationToken: String
 });
 
 userSchema.pre('save', async function (next) {
@@ -73,6 +74,17 @@ userSchema.pre('save', function (next) {
 
   next();
 });
+
+// userSchema.methods.createVerificationToken = function () {
+//   const verificationToken = crypto.randomBytes(32).toString('hex');
+//
+//   this.verificationToken = crypto
+//     .createHash('sha256')
+//     .update(verificationToken)
+//     .digest('hex');
+//
+//   return verificationToken;
+// };
 
 userSchema.methods.correctPassword = async function (
   enteredPassword,

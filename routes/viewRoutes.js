@@ -24,5 +24,6 @@ router.get(
   authController.protect,
   viewController.getMyBookings
 );
+router.get('/verifyEmail/:token', authController.verifyEmail);
 
 module.exports = router;

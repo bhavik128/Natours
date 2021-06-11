@@ -20,7 +20,7 @@ const createSendToken = (user, statusCode, req, res, message) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    secure: true //req.secure || req.headers('x-forwarded-proto') === 'https'
+    secure: req.secure || req.headers('x-forwarded-proto') === 'https'
   };
 
   res.cookie('natoursJWTToken', token, cookieOptions);
@@ -38,14 +38,26 @@ const createSendToken = (user, statusCode, req, res, message) => {
 exports.signup = catchAsync(async (req, res, next) => {
   const { name, email, password, passwordConfirm } = req.body;
 
+  const toSendVerificationToken = crypto.randomBytes(32).toString('hex');
+
+  const verificationToken = crypto
+    .createHash('sha256')
+    .update(toSendVerificationToken)
+    .digest('hex');
+
   const newUser = await User.create({
     name,
     email,
     password,
-    passwordConfirm
+    passwordConfirm,
+    verificationToken
   });
 
-  const url = `${req.protocol}://${req.get('host')}/me`;
+  // console.log(toSendVerificationToken);
+
+  const url = `${req.protocol}://${req.get(
+    'host'
+  )}/verifyEmail/${toSendVerificationToken}`;
 
   await new Email(newUser, url).sendWelcome();
 
@@ -201,6 +213,27 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   await user.save();
 
   createSendToken(user, 200, req, res, 'Password changed successfully');
+});
+
+exports.verifyEmail = catchAsync(async (req, res, next) => {
+  const { token } = req.params;
+
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  const user = await User.findOne({
+    verificationToken: hashedToken
+  });
+
+  if (!user) {
+    return next(new AppError('Token is invalid or expired', 400));
+  }
+
+  user.canBookTour = true;
+  user.verificationToken = undefined;
+
+  await user.save({ validateBeforeSave: false });
+
+  res.redirect('/');
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
