@@ -14,3 +14,5 @@ export const bookTour = async tourID => {
     showAlert('error', err);
   }
 };
+
+// email verification
